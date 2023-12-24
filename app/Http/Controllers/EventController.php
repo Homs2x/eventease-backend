@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use  App\Models\Event;
 use App\Models\Venue;
+use App\Models\Resources;
 use App\Http\Requests\EventRequest;
-use App\Http\Requests\VenueRequest;
 
 use Illuminate\Http\Request;
 
@@ -35,11 +35,21 @@ class EventController extends Controller
     if (!$venue || !$venue->availablity_status) {
         return response()->json(['message' => 'Venue is not available'], 400);
     }else{
-        $venue->update(['availablity_status' => false]);
+        $res = Resources::find($validated['resource_id']);
 
-        $Request =  Event::create($validated);
+        if (!$res || !$res->availability) {
+            return response()->json(['message' => 'Resourece is not available'], 400);
+        }
+        else{
 
-        return $Request;
+            $venue->update(['availablity_status' => false]);
+            $res->update(['availability' => false]);
+
+            $Request =  Event::create($validated);
+
+            return $Request;
+
+        }
         }
     }
     /**
