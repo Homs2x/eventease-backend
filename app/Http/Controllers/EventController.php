@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use  App\Models\Event;
+use App\Models\Venue;
 use App\Http\Requests\EventRequest;
+use App\Http\Requests\VenueRequest;
 
 use Illuminate\Http\Request;
 
@@ -23,11 +25,22 @@ class EventController extends Controller
     public function store(EventRequest $request)
     {
         //
+
         $validated = $request->validated();
+
+    // Retrieve the venue
+    $venue = Venue::find($validated['venue_id']);
+
+    // Check for availability
+    if (!$venue || !$venue->availablity_status) {
+        return response()->json(['message' => 'Venue is not available'], 400);
+    }else{
+        $venue->update(['availablity_status' => false]);
 
         $Request =  Event::create($validated);
 
         return $Request;
+        }
     }
     /**
      * Update the specified resource in storage.
@@ -47,13 +60,14 @@ class EventController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy( string $id)
     {
         //
         $Request = Event::findOrFail($id);
- 
+
         $Request->delete();
 
         return $Request;
+            
     }
 }
