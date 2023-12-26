@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use  App\Models\EventSchedule;
+use Illuminate\Support\Facades\DB;
 use App\Http\Requests\EventScheduleRequest;
 
 class EventScheduleController extends Controller
@@ -13,9 +14,12 @@ class EventScheduleController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    {
-        //
-        return EventSchedule::all();
+    {   
+            return DB::table('event_schedule')
+            ->join('event','event.event_id',"=",'event_schedule.event_id')
+            ->join('venue','venue.venue_id',"=",'event.venue_id')
+            ->get();
+       
     }
     /**
      * Store a newly created resource in storage.

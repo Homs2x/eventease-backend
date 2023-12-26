@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\EventSchedule;
 use  App\Models\Event;
 use App\Models\Venue;
 use App\Models\Resources;
@@ -24,33 +24,36 @@ class EventController extends Controller
      */
     public function store(EventRequest $request)
     {
-        //
-
         $validated = $request->validated();
 
-    // Retrieve the venue
-    $venue = Venue::find($validated['venue_id']);
+        // Retrieve the venue
+        $venue = Venue::find($validated['venue_id']);
 
-    // Check for availability
-    if (!$venue || !$venue->availablity_status) {
-        return response()->json(['message' => 'Venue is not available'], 400);
-    }else{
+        // Check for availability
+        if (!$venue || !$venue->availablity_status) {
+            return response()->json(['message' => 'Venue is not available'], 400);
+        }
+
         $res = Resources::find($validated['resource_id']);
 
         if (!$res || !$res->availability) {
-            return response()->json(['message' => 'Resourece is not available'], 400);
+            return response()->json(['message' => 'Resource is not available'], 400);
         }
-        else{
 
-            $venue->update(['availablity_status' => false]);
-            $res->update(['availability' => false]);
+        // Update availability status
+        $venue->update(['availablity_status' => false]);
+        $res->update(['availability' => false]);
 
-            $Request =  Event::create($validated);
+        // Create the event
+        $event = Event::create($validated);
 
-            return $Request;
+        // Create the associated event schedule
+        EventSchedule::create([
+            'event_id' => $event->event_id,
+            // Add other fields as needed
+        ]);
 
-        }
-        }
+        return $event;
     }
     /**
      * Update the specified resource in storage.

@@ -7,8 +7,6 @@ use App\Http\Controllers\ResourceController;
 use App\Http\Controllers\VenueController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\RequestController;
-use App\Models\Organizer;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,37 +23,8 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/logout',  [OrganizerController::class,'logout']);
     Route::post('/admin-logout',  [AdminController::class,'logout']);
-});
-
-Route::controller(OrganizerController::class)->group(function(){
-    Route::get('/organizer',        'index');
-    Route::post('/login',          'login');
-
-});
-
-Route::controller(RequestController::class)->group(function(){
-    Route::get('/request',        'index');
-    Route::post('/request',        'store');
-    Route::put('/request/{id}',    'update');
-    Route::delete('/request/{id}', 'destroy');
-});
-
-Route::controller(EventController::class)->group(function(){
-    Route::get('/event',        'index');
-    Route::post('/event',        'store');
-    Route::put('/event/{id}',    'update');
-    Route::delete('/event/{id}', 'destroy');
-});
-
-Route::controller(EventScheduleController::class)->group(function(){
-    Route::get('/eventschedule',        'index');
-    Route::post('/eventschedule',        'store');
-    Route::put('/eventschedule/{id}',    'update');
-    Route::delete('/eventschedule/{id}', 'destroy');
-});
-
-Route::controller(AdminController::class)->group(function(){
-    Route::post('/admin-login',          'login');
+    Route::get('/organizer/show', [OrganizerController::class,'index']);    
+    
 
 });
 
@@ -67,6 +36,39 @@ Route::controller(VenueController::class)->group(function(){
 Route::controller(ResourceController::class)->group(function(){
     Route::get('/resource',        'index');
     Route::put('/resource/{id}',    'update');
+
+    Route::controller(RequestController::class)->group(function(){
+        Route::get('/request',        'index');
+        Route::post('/request',        'store');
+        Route::put('/request/{id}',    'update');
+        Route::delete('/request/{id}', 'destroy');
+    });
+    
+    Route::controller(EventController::class)->group(function(){
+        Route::get('/event',        'index');
+        Route::post('/event',        'store');
+        Route::put('/event/{id}',    'update');
+        Route::delete('/event/{id}', 'destroy');
+    });
+    
+    Route::controller(EventScheduleController::class)->group(function(){
+        Route::get('/eventschedule',        'index');
+        Route::post('/eventschedule',        'store');
+        Route::put('/eventschedule/{id}',    'update');
+        Route::delete('/eventschedule/{id}', 'destroy');
+    });
+
+});
+
+//PUBLIC APIS
+
+Route::controller(OrganizerController::class)->group(function(){
+    Route::post('/login',          'login');
+
+});
+
+Route::controller(AdminController::class)->group(function(){
+    Route::post('/admin-login',          'login');
 
 });
 

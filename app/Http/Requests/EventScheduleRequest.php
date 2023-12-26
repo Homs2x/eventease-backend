@@ -24,9 +24,6 @@ class EventScheduleRequest extends FormRequest
         return [
             //
             'event_id' => 'integer|required',
-            'date_sel' => 'required|date_format:d-m-Y',
-            'time_sel' => 'required|date_format:H:i A',
-
         ];
     }
 }

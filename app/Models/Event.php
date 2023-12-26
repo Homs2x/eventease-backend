@@ -24,6 +24,9 @@ class Event extends Model
         'resource_id',
         'event_name',
         'event_desc',
+        'organizer_id',
+        'date_sel',
+        'time_sel'
 
     ];
 }

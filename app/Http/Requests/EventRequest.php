@@ -26,6 +26,9 @@ class EventRequest extends FormRequest
             'event_name' => 'required|max:20',
             'event_desc' => 'required|max:255',
             'resource_id' => 'required|integer',
+            'organizer_id' =>'required|integer',
+            'date_sel' => 'required|date_format:d-m-Y',
+            'time_sel' => 'required|date_format:H:i A',
         ];
     }
 }

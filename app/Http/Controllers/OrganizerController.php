@@ -14,9 +14,9 @@ class OrganizerController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $reqeust)
     {
-        return Organizer::all();
+        return $reqeust->user();
     }
 
     /**
