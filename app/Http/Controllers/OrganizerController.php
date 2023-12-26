@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 use App\Models\Organizer;
 use App\Http\Requests\OrganizerRequest;
-use Illuminate\Support\Facades\Hash;
+
 
 class OrganizerController extends Controller
 {
@@ -35,20 +35,27 @@ class OrganizerController extends Controller
      
         $response =[
             'user' => $user,
-
+            'token' =>$user->createToken($request->email)->plainTextToken
 
         ];
 
         return $response;
     }
     public function logout(Request $request)
-    {
-        $request->user();
-
+{
+    // Ensure that there is a logged-in user
+    if (Auth::check()) {
+        // Revoke the user's tokens
+        $request->user()->tokens()->delete();
+        
         $response = [
-            'message' => 'Logout.'
+            'message' => 'USER Logout.'
         ];
 
-      return $response;
+        return $response;
     }
+
+    // If no user is logged in, return an appropriate response
+    return response()->json(['message' => 'No user logged in.'], 401);
+}
 }

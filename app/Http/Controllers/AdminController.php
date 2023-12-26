@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Admin;
+use Illuminate\Support\Facades\Auth;
 use  App\Http\Requests\AdminRequest;
 use Illuminate\Validation\ValidationException;
 
@@ -25,21 +26,26 @@ class AdminController extends Controller
      
         $response =[
             'user' => $user,
+            'token' =>$user->createToken($request->username)->plainTextToken
         ];
 
         return $response;
     }
     public function logout(Request $request)
     {
-        if ($request->user()) {
-            // If user is logged in, proceed with logout
-            auth()->guard('admin')->logout(); // Assuming you're using the 'admin' guard
-            $response = ['message' => 'Logout.'];
-        } else {
-            // If user is not logged in, return a message
-            $response = ['message' => 'You need to login first.'];
+        // Ensure that there is a logged-in user
+        if (Auth::check()) {
+            // Revoke the user's tokens
+            $request->user()->tokens()->delete();
+            
+            $response = [
+                'message' => 'ADMIN Logout.'
+            ];
+    
+            return $response;
         }
-
-        return $response;
+    
+        // If no user is logged in, return an appropriate response
+        return response()->json(['message' => 'No user logged in.'], 401);
     }
 }

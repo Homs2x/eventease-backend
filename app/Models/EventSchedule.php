@@ -21,5 +21,6 @@ class EventSchedule extends Model
     protected $fillable = [
         'event_id',
         'date_sel',
+        'time_sel'
     ];
 }

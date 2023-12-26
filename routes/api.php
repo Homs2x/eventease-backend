@@ -7,6 +7,7 @@ use App\Http\Controllers\ResourceController;
 use App\Http\Controllers\VenueController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\RequestController;
+use App\Models\Organizer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -21,14 +22,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::post('/logout',  [OrganizerController::class,'logout']);
+    Route::post('/admin-logout',  [AdminController::class,'logout']);
 });
 
 Route::controller(OrganizerController::class)->group(function(){
     Route::get('/organizer',        'index');
     Route::post('/login',          'login');
-    Route::post('/logout',         'logout');
 
 });
 
@@ -55,7 +56,6 @@ Route::controller(EventScheduleController::class)->group(function(){
 
 Route::controller(AdminController::class)->group(function(){
     Route::post('/admin-login',          'login');
-    Route::post('/admin-logout',         'logout');
 
 });
 
