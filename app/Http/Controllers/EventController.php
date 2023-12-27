@@ -5,6 +5,7 @@ use App\Models\EventSchedule;
 use  App\Models\Event;
 use App\Models\Venue;
 use App\Models\Resources;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\EventRequest;
 
 use Illuminate\Http\Request;
@@ -34,25 +35,25 @@ class EventController extends Controller
             return response()->json(['message' => 'Venue is not available'], 400);
         }
 
-        $res = Resources::find($validated['resource_id']);
+         $res = Resources::find($validated['resource_id']);
 
-        if (!$res || !$res->availability) {
-            return response()->json(['message' => 'Resource is not available'], 400);
-        }
+         if (!$res || !$res->availability) {
+             return response()->json(['message' => 'Resource is not available'], 400);
+         }
 
         // Update availability status
         $venue->update(['availablity_status' => false]);
         $res->update(['availability' => false]);
 
         // Create the event
-        $event = Event::create($validated);
+        $event = Event::create($validated );
+
 
         // Create the associated event schedule
         EventSchedule::create([
             'event_id' => $event->event_id,
             // Add other fields as needed
         ]);
-
         return $event;
     }
     /**

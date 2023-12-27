@@ -12,6 +12,11 @@ use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
+    public function index(Request $request){
+
+        return $request->user();
+
+    }
     //
     public function login(AdminRequest $request)
     {

@@ -23,7 +23,8 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/logout',  [OrganizerController::class,'logout']);
     Route::post('/admin-logout',  [AdminController::class,'logout']);
-    Route::get('/organizer/show', [OrganizerController::class,'index']);    
+    Route::get('/organizer/show', [OrganizerController::class,'index']);  
+    Route::get('/admin/show', [AdminController::class,'index']); 
     
 
 });

@@ -20,11 +20,11 @@ class Event extends Model
     ];
 
     protected $fillable =[
+        'organizer_id',
         'venue_id',
         'resource_id',
         'event_name',
         'event_desc',
-        'organizer_id',
         'date_sel',
         'time_sel'
 
